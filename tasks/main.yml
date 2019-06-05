@@ -1,0 +1,62 @@
+---
+- name: Create a dedicated group for vault
+  group:
+    name: "{{ vault_group }}"
+    state: present
+
+- name: Create a dedicated user to run vault
+  user:
+    name: "{{ vault_user }}"
+    group: "{{ vault_group }}"
+    create_home: no
+    system: yes
+    expires: -1
+    state: present
+
+- name: Create the required directories
+  file:
+    state: directory
+    path: "{{ item }}"
+    mode: 0755
+    owner: "{{ vault_user }}"
+    group: "{{ vault_group }}"
+  loop:
+    - "{{ vault_cfg_dir }}"
+    - "{{ vault_var_dir }}"
+
+- name: Template the config file
+  template:
+    src: "vault.hcl.j2"
+    dest: "{{ vault_cfg_dir }}/000-config.hcl"
+    mode: 0640
+    owner: "{{ vault_user }}"
+    group: "{{ vault_group }}"
+  notify:
+    - restart vault
+
+- name: Diable cli history for vault
+  template:
+    src: "vault-config.sh.j2"
+    dest: "/etc/profile.d/vault-config.sh"
+    mode: 0644
+    owner: "root"
+    group: "root"
+
+- name: Template the systemd service file
+  when: ansible_service_mgr == 'systemd'
+  template:
+    src: "vault.service.j2"
+    dest: "{{ item }}"
+    mode: 0640
+    owner: "{{ vault_user }}"
+    group: "{{ vault_group }}"
+  loop:
+    - "{{ vault_cfg_dir }}/vault.service"
+    - /etc/systemd/system/vault.service
+  notify:
+    - restart vault
+
+- name: Warn the user on init
+  when: ansible_service_mgr != 'systemd'
+  debug:
+    msg: "The role supports 'systemd' only, you need to configure your system accordingly for vault to run as a service."

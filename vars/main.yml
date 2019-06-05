@@ -1,0 +1,3 @@
+---
+vault_plugins_dir: "{{ vault_var_dir }}/plugins"
+vault_data_dir: "{{ vault_var_dir }}/data"

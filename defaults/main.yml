@@ -1,0 +1,30 @@
+---
+vault_bin_dir: "/opt/vault"
+vault_cfg_dir: "/etc/vault"
+
+# https://www.vaultproject.io/docs/configuration/index.html#plugin_directory
+vault_var_dir: "/var/vault"
+
+vault_user: "vault"
+vault_group: "vault"
+
+vault_service_role: "server" # server | agent
+
+vault_configs: |
+  log_level    = "Info"
+  ui           = true
+
+vault_listen: |
+  listener "tcp" {
+    address     = "127.0.0.1:8200"
+    tls_disable = 1
+  }
+
+vault_storage: |
+  storage "file" {
+    path        = "{{ vault_data_dir }}"
+  }
+
+vault_seals: ""
+
+vault_telemetry: ""

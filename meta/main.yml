@@ -1,0 +1,33 @@
+galaxy_info:
+  name: vault_config
+  author: nioniosfr
+  description: A role to configure HashiCorp vault as a service
+  license: MIT
+
+  min_ansible_version: 2.4
+
+  # If this a Container Enabled role, provide the minimum Ansible Container version.
+  # min_ansible_container_version:
+
+  platforms:
+    - name: EL
+      versions:
+        - 7
+    - name: CentOS
+      versions:
+        - 7
+    - name: Fedora
+      versions:
+        - 28
+        - 29
+
+  galaxy_tags:
+    - vault
+    - secure
+    - security
+    - service
+    - configuration
+    - authorization
+    - secrets
+
+dependencies: []
