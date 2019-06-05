@@ -1,5 +1,5 @@
 galaxy_info:
-  name: vault_config
+  role_name: vault_config
   author: nioniosfr
   description: A role to configure HashiCorp vault as a service
   license: MIT
